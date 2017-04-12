@@ -15,8 +15,9 @@ $ pip3 install -e git+https://github.com/paxos-bankchain/subconscious.git@9bed39
 
 Run the server:
 ```bash
-$ python3 server.py
+$ python3.6 server.py
 ```
+Note: this requires python3.6!
 
 ## TODOs
 1. simple/performant deploy (docker?)
