@@ -1,0 +1,21 @@
+{% extends "base.jinja2" %}
+{% block title %}New Paste{% endblock %}
+
+{% block content %}
+
+  <p>Upload your pastie:</p>
+
+  <form action="/pastes" method="post" accept-charset="utf-8" enctype="application/x-www-form-urlencoded">
+
+    <label for="title">Title</label>
+    <input id="title" name="title" type="text" value="" autofocus/>
+    <br />
+
+    <label for="body">Body</label>
+    <textarea id="body" name="body" type="text" value=""> </textarea>
+
+    <input class="waves-effect waves-light btn" type="submit" value="Upload"/>
+
+  </form>
+
+{% endblock content %}

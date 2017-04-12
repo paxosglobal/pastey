@@ -1,0 +1,18 @@
+{% extends "base.jinja2" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+  <h2>Welcome</h2>
+
+  <p>Recent Pasties</p>
+
+  <ul class="collection">
+    {% for recent_paste in recent_pastes %}
+      <li class="collection-item">
+        <a href="/pastes/{{recent_paste.uuid}}">{{ recent_paste.title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+
+{% endblock content %}

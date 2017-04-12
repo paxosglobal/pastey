@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="style.css" />
+    <title>{% block title %}{% endblock %} | Pastie</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/css/materialize.min.css"
+    >
+    {% endblock %}
+  </head>
+  <body>
+
+    {# nav #}
+    <nav>
+       <div class="nav-wrapper">
+         <a href="/" class="brand-logo">Pastie</a>
+         <ul id="nav-mobile" class="right hide-on-med-and-down">
+           <li><a href="/pastes">Upload Pastie</a></li>
+           <li><a href="/">Recent Pasties</a></li>
+         </ul>
+       </div>
+     </nav>
+
+    <div class="container" id="content">{% block content %}{% endblock %}</div>
+    <hr />
+
+
+    <footer class="page-footer">
+      <div class="footer-copyright">
+        <div class="container">
+          &copy; Copyright 2017
+          <a class="grey-text" href="https://www.paxos.com/">Paxos Trust Company, LLC</a>.
+        </div>
+      </div>
+    </footer>
+
+  </body>
+</html>
