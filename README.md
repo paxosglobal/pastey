@@ -1,6 +1,6 @@
-# Pastey: An Example Performant Async Python 3.6 Redis-Backed App
+# Pastey: A Performant Async Python 3.6 App using Subconscoius
 
-Run a redis instance:
+First, run a redis instance:
 ```bash
 $  docker run -d -p 6379:6379 redis
 ```
@@ -8,19 +8,16 @@ $  docker run -d -p 6379:6379 redis
 Create & activate virtualenv (you may need to run `pip3 install virtualenv` if you haven't), install dependencies:
 ```bash
 $ python3 -m virtualenv .venv && source .venv/bin/activate
-$ pip3 install aiohttp aiohttp-jinja2 aioredis
-$ pip3 install -e git+https://github.com/paxos-bankchain/subconscious.git@9bed39fd5523a6a36417abe5873773d3cb96ea25#egg=subconscious --no-dependencies
+$ pip3 install -r requirements.txt
 ```
-(FIXME: `--no-dependencies` and add subconscious to pypi)
 
 Run the server:
 ```bash
 $ python3.6 server.py
 ```
-Note: this requires python3.6!
 
 ## TODOs
 1. simple/performant deploy (docker?)
 2. add test coverage!
 3. make UI not awful?
-4. load test?
+4. performance test?

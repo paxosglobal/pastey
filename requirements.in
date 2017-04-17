@@ -1,0 +1,3 @@
+aiohttp-jinja2==0.13.0
+aiohttp==2.0.7
+subconscious==0.8.1

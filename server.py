@@ -96,6 +96,6 @@ if __name__ == '__main__':
     app = loop.run_until_complete(init_app(loop=loop))
     web.run_app(
         app,
-        host=os.getenv('PASTIE_HOST', '127.0.0.1'),
-        port=int(os.getenv('PASTIE_PORT', 8080)),
+        host=os.getenv('PASTEY_HOST', '127.0.0.1'),
+        port=int(os.getenv('PASTEY_PORT', 8080)),
     )
