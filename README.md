@@ -1,4 +1,4 @@
-# Pastey: A Performant Async Python 3.6 App using Subconscoius
+# Pastey: A Performant Async Python 3.6 App using Subconscious
 
 First, run a redis instance:
 ```bash
