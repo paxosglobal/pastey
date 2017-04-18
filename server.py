@@ -9,6 +9,10 @@ from subconscious.model import RedisModel, Column
 from uuid import uuid4
 
 
+# For simplicity all of this is in one file
+# Typically, you'd pull a lot of this out into models.py, views.py and perhaps even forms.py
+
+
 class Paste(RedisModel):
     uuid = Column(type=str, primary_key=True)
     title = Column(type=str, required=True)
@@ -72,8 +76,7 @@ async def save_paste(request):
     return {}
 
 
-async def init_app(loop):
-    app = web.Application()
+async def init_app(app):
     app['db'] = await aioredis.create_redis(
         address=(
             os.getenv('REDIS_HOST', 'redis'),
@@ -83,6 +86,13 @@ async def init_app(loop):
         loop=None,
         encoding='utf-8',
     )
+    return app
+
+
+def create_app():
+    # needed for gunicorn
+    app = web.Application(loop=None)
+    app.on_startup.append(init_app)
     app.router.add_get('/', index)
     app.router.add_route('*', '/pastes', save_paste)
     app.router.add_get('/pastes/{uuid}', get_paste)
@@ -92,8 +102,12 @@ async def init_app(loop):
 
 
 if __name__ == '__main__':
+    """
+    For basic invocation (gunicorn is faster):
+    $ python server.py
+    """
     loop = asyncio.get_event_loop()
-    app = loop.run_until_complete(init_app(loop=loop))
+    app = create_app(loop=loop)
     web.run_app(
         app,
         host=os.getenv('PASTEY_HOST', '0.0.0.0'),
