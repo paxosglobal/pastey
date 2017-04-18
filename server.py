@@ -10,7 +10,6 @@ from uuid import uuid4
 
 
 class Paste(RedisModel):
-
     uuid = Column(type=str, primary_key=True)
     title = Column(type=str, required=True)
     body = Column(type=str, required=True)
@@ -20,6 +19,7 @@ class Paste(RedisModel):
 async def index(request):
     cnt, recent_pastes = 0, []
     # TODO: better syntax for async generator?
+    # TODO: get most recent Pasteys only
     async for paste in Paste.all(db=request.app['db']):
         recent_pastes.append(paste)
         cnt += 1
@@ -55,7 +55,7 @@ async def save_paste(request):
     post_data = await request.post()
     if post_data:
         title = post_data.get('title')
-        body = post_data.get('body')
+        body = post_data.get('body', '')
         if title:
             paste_obj = Paste(
                 uuid=str(uuid4()),
@@ -66,7 +66,7 @@ async def save_paste(request):
             # redirect to paste page
             return web.HTTPFound('/pastes/{}'.format(paste_obj.uuid))
         else:
-            # show error msg
+            # TODO: show error msg
             pass
 
     return {}
@@ -76,7 +76,7 @@ async def init_app(loop):
     app = web.Application()
     app['db'] = await aioredis.create_redis(
         address=(
-            os.getenv('REDIS_HOST', '127.0.0.1'),
+            os.getenv('REDIS_HOST', 'redis'),
             int(os.getenv('REDIS_PORT', 6379))
         ),
         db=int(os.getenv('REDIS_DB', 1)),
@@ -96,6 +96,6 @@ if __name__ == '__main__':
     app = loop.run_until_complete(init_app(loop=loop))
     web.run_app(
         app,
-        host=os.getenv('PASTEY_HOST', '127.0.0.1'),
-        port=int(os.getenv('PASTEY_PORT', 8080)),
+        host=os.getenv('PASTEY_HOST', '0.0.0.0'),
+        port=int(os.getenv('PASTEY_PORT', 5000)),
     )

@@ -12,7 +12,6 @@
 .hypothesis
 .idea
 .venv*
-/src
 build
 config.yml
 config/
