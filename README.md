@@ -23,10 +23,21 @@ $ python3 -m virtualenv .venv && source .venv/bin/activate
 $ pip3 install -r requirements.txt
 ```
 
-Run the server:
+Set environmental variables (these are already set to the right defaults in docker):
 ```bash
-$ python3.6 server.py
+$ EXPORT REDIS_HOST=127.0.0.1 REDIS_PORT=6379 REDIS_DB=1 PASTEY_HOST=0.0.0.0 PASTEY_PORT=5000
 ```
+
+Run the server the old-fashioned way:
+```bash
+$  python3.6 server.py
+```
+
+Run the server with gunicorn/uvloop:
+```bash
+$ ./gunicorn.sh
+```
+
 
 ## Load Test
 
