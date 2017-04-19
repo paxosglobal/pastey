@@ -6,6 +6,7 @@ import jinja2
 import os
 
 from aiohttp import web
+from datetime import datetime
 from subconscious.model import RedisModel, Column
 from uuid import uuid4
 
@@ -16,21 +17,15 @@ from uuid import uuid4
 
 class Paste(RedisModel):
     uuid = Column(type=str, primary_key=True)
+    created_at = Column(type=str, required=True, sort=True)
     title = Column(type=str, required=True)
     body = Column(type=str, required=True)
 
 
 @aiohttp_jinja2.template('index.jinja2')
 async def index(request):
-    cnt, recent_pastes = 0, []
-    # TODO: better syntax for async generator?
-    # TODO: get most recent Pasteys only
-    async for paste in Paste.all(db=request.app['db']):
-        recent_pastes.append(paste)
-        cnt += 1
-        if cnt > 5:
-            # TODO: add LIMIT to subconscious
-            break
+    # TODO: add LIMIT to subconscious
+    recent_pastes = [paste async for paste in Paste.all(db=request.app['db'], order_by='-created_at')]
     return {'recent_pastes': recent_pastes}
 
 
@@ -46,10 +41,7 @@ async def get_paste(request):
 
     if paste_obj:
         # Render the page
-        return {
-            'title': paste_obj.title,
-            'body': paste_obj.body,
-        }
+        return {'paste_obj': paste_obj.as_dict()}
     else:
         # Redirect to homepage
         return web.HTTPFound('/')
@@ -64,6 +56,7 @@ async def save_paste(request):
         if title:
             paste_obj = Paste(
                 uuid=str(uuid4()),
+                created_at=str(datetime.utcnow().isoformat()),
                 title=title,
                 body=body,
             )
@@ -87,6 +80,8 @@ async def init_app(app):
         loop=None,
         encoding='utf-8',
     )
+    # flush the DB (not very production safe):
+    app['db'].flushdb()
     return app
 
 

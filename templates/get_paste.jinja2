@@ -3,7 +3,8 @@
 
 {% block content %}
 
-  <h4>{{ title }}</h4>
-  <p>{{ body }}</p>
+  <h4>{{ paste_obj.title }}</h4>
+  <p>Created At: {{ paste_obj.created_at }}</p>
+  <p>{{ paste_obj.body }}</p>
 
 {% endblock content %}

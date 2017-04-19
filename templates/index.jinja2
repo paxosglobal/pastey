@@ -5,14 +5,33 @@
 
   <h2>Welcome</h2>
 
-  <p>Recent Pasteys</p>
-
-  <ul class="collection">
-    {% for recent_paste in recent_pastes %}
-      <li class="collection-item">
-        <a href="/pastes/{{recent_paste.uuid}}">{{ recent_paste.title }}</a>
-      </li>
-    {% endfor %}
-  </ul>
+  {% if recent_pastes %}
+    <h4>Recent Pasteys</h4>
+    <table>
+      <thead>
+        <tr>
+            <th>Title</th>
+            <th>Date</th>
+            <th>UUID</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for recent_paste in recent_pastes %}
+          <tr>
+            <td>
+              <a href="/pastes/{{recent_paste.uuid}}">{{ recent_paste.title }}</a>
+            </td>
+            <td>{{ recent_paste.created_at }}</td>
+            <td>{{ recent_paste.uuid }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>
+      No Pasteys yet.
+      <a href="/pastes">Be the first</a>!
+    </p>
+  {% endif %}
 
 {% endblock content %}
