@@ -33,7 +33,7 @@ Run the server the old-fashioned way:
 $  python3.6 server.py
 ```
 
-Run the server with gunicorn/uvloop:
+Or, for better performance run the server with gunicorn/uvloop:
 ```bash
 $ ./gunicorn.sh
 ```
@@ -41,7 +41,7 @@ $ ./gunicorn.sh
 
 ## Load Test
 
-1. First, seed the database with a bunch of Pasteys via curl call:
+1. Seed the database with a bunch of Pasteys via curl call:
 ```bash
 $ for i in {1..10}; do curl -F title="Title #$i" -F body="$(openssl rand -base64 1000)" 0.0.0.0:5000/pastes -L -s -o /dev/null -w '%{url_effective}\n'; done
 http://0.0.0.0:5000/pastes/80f58d80-a6a3-4bf3-86d4-7ded65e41448
@@ -49,7 +49,7 @@ http://0.0.0.0:5000/pastes/80f58d80-a6a3-4bf3-86d4-7ded65e41448
 ```
 (you can do this via web interface if you prefer)
 
-Make a bunch of requests to one valid Pastey URL:
+2. Make a bunch of requests to a valid Pastey URL (generated in the previous step):
 ```bash
 $ ab -n 10000 -c 5 http://0.0.0.0:5000/pastes/80f58d80-a6a3-4bf3-86d4-7ded65e41448
 ...
