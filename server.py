@@ -90,8 +90,7 @@ async def init_app(app):
 
 
 def create_app():
-    # needed for gunicorn
-    app = web.Application(loop=None)
+    app = web.Application()
     app.on_startup.append(init_app)
     app.router.add_get('/', index)
     app.router.add_route('*', '/pastes', save_paste)
@@ -102,10 +101,7 @@ def create_app():
 
 
 if __name__ == '__main__':
-    """
-    For basic invocation (gunicorn is faster):
-    $ python server.py
-    """
+    # For basic invocation: $ python server.py
     loop = asyncio.get_event_loop()
     app = create_app(loop=loop)
     web.run_app(
@@ -113,3 +109,6 @@ if __name__ == '__main__':
         host=os.getenv('PASTEY_HOST', '0.0.0.0'),
         port=int(os.getenv('PASTEY_PORT', 5000)),
     )
+else:
+    # This is where you'd create the app via gunicorn: $ ./entrypoint.sh
+    pass
