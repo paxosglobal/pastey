@@ -23,57 +23,67 @@ $ python3 -m virtualenv .venv && source .venv/bin/activate
 $ pip3 install -r requirements.txt
 ```
 
-Run the server:
+Set environmental variables (these are already set to the right defaults in docker):
 ```bash
-$ python3.6 server.py
+$ EXPORT REDIS_HOST=127.0.0.1 REDIS_PORT=6379 REDIS_DB=1 PASTEY_HOST=0.0.0.0 PASTEY_PORT=5000
 ```
+
+Run the server the old-fashioned way:
+```bash
+$  python3.6 server.py
+```
+
+Run the server with gunicorn/uvloop:
+```bash
+$ ./gunicorn.sh
+```
+
 
 ## Load Test
 
-1. First, seed the database with a Pastey via web interface or curl call:
+1. First, seed the database with a bunch of Pasteys via curl call:
 ```bash
-$ $ curl -F title="some title $(openssl rand -hex 12)" -F body="$(openssl rand -base64 1024)" 0.0.0.0:5000/pastes -L -s -o /dev/null -w '%{url_effective}'
-http://0.0.0.0:5000/pastes/d1337110-2bcc-4e20-bc7e-87a6476a6b9
+$ for i in {1..10}; do curl -F title="Title #$i" -F body="$(openssl rand -base64 1000)" 0.0.0.0:5000/pastes -L -s -o /dev/null -w '%{url_effective}\n'; done
+http://0.0.0.0:5000/pastes/80f58d80-a6a3-4bf3-86d4-7ded65e41448
+...
 ```
+(you can do this via web interface if you prefer)
 
+Make a bunch of requests to one valid Pastey URL:
 ```bash
-$ ab -n 10000 -c 10 http://0.0.0.0:5000/pastes/d1337110-2bcc-4e20-bc7e-87a6476a6b9
-
+$ ab -n 10000 -c 5 http://0.0.0.0:5000/pastes/80f58d80-a6a3-4bf3-86d4-7ded65e41448
 ...
 
-Concurrency Level:      10
-Time taken for tests:   26.854 seconds
+Concurrency Level:      5
+Time taken for tests:   40.628 seconds
 Complete requests:      10000
 Failed requests:        0
-Non-2xx responses:      10000
-Total transferred:      1770000 bytes
-HTML transferred:       100000 bytes
-Requests per second:    372.38 [#/sec] (mean)
-Time per request:       26.854 [ms] (mean)
-Time per request:       2.685 [ms] (mean, across all concurrent requests)
-Transfer rate:          64.37 [Kbytes/sec] received
+Total transferred:      24910000 bytes
+HTML transferred:       23390000 bytes
+Requests per second:    246.14 [#/sec] (mean)
+Time per request:       20.314 [ms] (mean)
+Time per request:       4.063 [ms] (mean, across all concurrent requests)
+Transfer rate:          598.76 [Kbytes/sec] received
 
 Connection Times (ms)
               min  mean[+/-sd] median   max
-Connect:        0    2   2.5      1      23
-Processing:     5   24   7.7     23     103
-Waiting:        5   20   7.0     19     101
-Total:          6   26   7.9     25     104
+Connect:        0    1   6.3      1     236
+Processing:     5   18  27.7     16    1024
+Waiting:        5   17  27.4     14    1019
+Total:          6   19  28.4     17    1025
 
 Percentage of the requests served within a certain time (ms)
-  50%     25
-  66%     27
-  75%     29
-  80%     30
-  90%     34
-  95%     38
-  98%     45
-  99%     54
- 100%    104 (longest request)
-
+  50%     17
+  66%     18
+  75%     19
+  80%     19
+  90%     22
+  95%     26
+  98%     33
+  99%    116
+ 100%   1025 (longest request)
 ```
 
 ## TODOs
 1. add test coverage!
 2. make UI not awful?
-3. uvloop
