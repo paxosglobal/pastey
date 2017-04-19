@@ -24,8 +24,11 @@ class Paste(RedisModel):
 
 @aiohttp_jinja2.template('index.jinja2')
 async def index(request):
-    # TODO: add LIMIT to subconscious
-    recent_pastes = [paste async for paste in Paste.all(db=request.app['db'], order_by='-created_at')]
+    recent_pastes = [x async for x in Paste.all(
+        db=request.app['db'],
+        order_by='-created_at',
+        limit=5)
+    ]
     return {'recent_pastes': recent_pastes}
 
 

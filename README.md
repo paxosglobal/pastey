@@ -14,8 +14,9 @@ http://0.0.0.0:5000/
 
 First, run a redis instance:
 ```bash
-$  docker run -d -p 6379:6379 redis
+$  docker run -p 6379:6379 redis
 ```
+(you can use `-d` to daemonize this process)
 
 Create & activate virtualenv (you may need to run `pip3 install virtualenv` if you haven't), install dependencies:
 ```bash
@@ -43,7 +44,7 @@ $ ./gunicorn.sh
 
 1. Seed the database with a bunch of Pasteys via curl call:
 ```bash
-$ for i in {1..10}; do curl -F title="Title #$i" -F body="$(openssl rand -base64 1000)" 0.0.0.0:5000/pastes -L -s -o /dev/null -w '%{url_effective}\n'; done
+$ for i in {1..5}; do curl -F title="Title #$i" -F body="$(openssl rand -base64 1000)" 0.0.0.0:5000/pastes -L -s -o /dev/null -w '%{url_effective}\n'; done
 http://0.0.0.0:5000/pastes/80f58d80-a6a3-4bf3-86d4-7ded65e41448
 ...
 ```
