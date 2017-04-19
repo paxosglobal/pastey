@@ -17,7 +17,7 @@ from uuid import uuid4
 
 class Paste(RedisModel):
     uuid = Column(type=str, primary_key=True)
-    created_at = Column(type=str, required=True)
+    created_at = Column(type=str, required=True, sort=True)
     title = Column(type=str, required=True)
     body = Column(type=str, required=True)
 
@@ -26,8 +26,7 @@ class Paste(RedisModel):
 async def index(request):
     cnt, recent_pastes = 0, []
     # TODO: better syntax for async generator?
-    # TODO: get most recent Pasteys only
-    async for paste in Paste.all(db=request.app['db']):
+    async for paste in Paste.all(db=request.app['db'], order_by='-created_at'):
         recent_pastes.append(paste)
         cnt += 1
         if cnt > 5:
