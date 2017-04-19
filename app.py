@@ -24,14 +24,8 @@ class Paste(RedisModel):
 
 @aiohttp_jinja2.template('index.jinja2')
 async def index(request):
-    cnt, recent_pastes = 0, []
-    # TODO: better syntax for async generator?
-    async for paste in Paste.all(db=request.app['db'], order_by='-created_at'):
-        recent_pastes.append(paste)
-        cnt += 1
-        if cnt > 5:
-            # TODO: add LIMIT to subconscious
-            break
+    # TODO: add LIMIT to subconscious
+    recent_pastes = [paste async for paste in Paste.all(db=request.app['db'], order_by='-created_at')]
     return {'recent_pastes': recent_pastes}
 
 
