@@ -4,7 +4,7 @@
 
 Install [docker](https://www.docker.com/community-edition) and then run:
 ```bash
-$ docker-compose up
+$ docker-compose up --build
 ```
 
 Visit this page in your browser:
