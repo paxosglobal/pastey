@@ -4,10 +4,9 @@
 #
 #    pip-compile --output-file requirements.txt requirements.in
 #
--e git+https://github.com/paxos-bankchain/subconscious.git@08ad3ae172a54518b194c5a653cd203a59394671#egg=subconscious
 aiohttp-jinja2==0.13.0
 aiohttp==2.0.7
-aioredis==0.3.0
+aioredis==0.3.0           # via subconscious
 async-timeout==1.2.0      # via aiohttp
 chardet==3.0.2            # via aiohttp
 gunicorn==19.7.1
@@ -15,5 +14,6 @@ hiredis==0.2.0            # via aioredis
 jinja2==2.9.6             # via aiohttp-jinja2
 markupsafe==1.0           # via jinja2
 multidict==2.1.4          # via aiohttp, yarl
+subconscious==0.8.3
 uvloop==0.8.0
 yarl==0.10.0              # via aiohttp
