@@ -85,6 +85,4 @@ Percentage of the requests served within a certain time (ms)
  100%   1025 (longest request)
 ```
 
-## TODOs
-1. add test coverage!
-2. make UI not awful?
+TODO: add test coverage
