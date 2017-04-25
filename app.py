@@ -66,11 +66,13 @@ async def save_paste(request):
             await paste_obj.save(request.app['db'])
             # redirect to paste page
             return web.HTTPFound('/pastes/{}'.format(paste_obj.uuid))
-        else:
-            # TODO: show error msg
-            pass
-
     return {}
+
+
+async def flush_db(request):
+    """ Undocumented endpoint to wipe the DB """
+    await request.app['db'].flushdb()
+    return web.HTTPFound('https://www.youtube.com/watch?v=dQw4w9WgXcQ')
 
 
 async def init_app(app):
@@ -84,7 +86,7 @@ async def init_app(app):
         encoding='utf-8',
     )
     # flush the DB (not very production safe):
-    app['db'].flushdb()
+    await app['db'].flushdb()
     return app
 
 
@@ -94,6 +96,7 @@ def create_app():
     app.router.add_get('/', index)
     app.router.add_route('*', '/pastes', save_paste)
     app.router.add_get('/pastes/{uuid}', get_paste)
+    app.router.add_get('/flush', flush_db)
     templates_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'templates')
     aiohttp_jinja2.setup(app, loader=jinja2.FileSystemLoader(templates_dir))
     return app
