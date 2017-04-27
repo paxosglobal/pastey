@@ -98,5 +98,9 @@ def create_app():
     app.router.add_get('/pastes/{uuid}', get_paste)
     app.router.add_get('/flush', flush_db)
     templates_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'templates')
-    aiohttp_jinja2.setup(app, loader=jinja2.FileSystemLoader(templates_dir))
+    aiohttp_jinja2.setup(
+        app,
+        loader=jinja2.FileSystemLoader(templates_dir),
+        autoescape=True,
+    )
     return app
